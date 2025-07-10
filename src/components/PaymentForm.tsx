@@ -39,8 +39,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ packageType, amount, onPaymen
     setIsLoading(true);
 
     try {
-      // You need to replace this with your actual Flutterwave public key
-      const publicKey = "FLWPUBK_TEST-SANDBOX_PUBLIC_KEY_HERE"; // Replace with your actual public key
+      // Replace with your actual Flutterwave public key
+      const publicKey = "FLWPUBK-3d0e062fa50b5b538affc64535245178-X";
       
       if (!window.FlutterwaveCheckout) {
         alert('Payment system is loading. Please try again in a moment.');
@@ -48,21 +48,17 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ packageType, amount, onPaymen
         return;
       }
 
+      const txRef = "tx-" + Date.now();
+
       window.FlutterwaveCheckout({
         public_key: publicKey,
-        tx_ref: `QR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        tx_ref: txRef,
         amount: amount,
         currency: "NGN",
-        payment_options: "card,mobilemoney,ussd",
+        payment_options: "card,ussd,banktransfer",
         customer: {
           email: formData.email,
-          phone_number: formData.phone,
           name: formData.name,
-        },
-        customizations: {
-          title: "QuickReceipt Pro",
-          description: `${packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package - Custom Receipt App`,
-          logo: "",
         },
         callback: function (data: any) {
           console.log("Payment callback:", data);
@@ -73,9 +69,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ packageType, amount, onPaymen
           }
           setIsLoading(false);
         },
-        onclose: function () {
-          console.log("Payment modal closed");
-          setIsLoading(false);
+        customizations: {
+          title: "QuickReceipt Pro",
+          description: `${packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package - Custom Receipt App`,
+          logo: "",
         },
       });
     } catch (error) {
