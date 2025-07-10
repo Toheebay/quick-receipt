@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { Plus, Trash2, Receipt, Download, Printer } from 'lucide-react';
+import { Plus, Trash2, Receipt, Download, Printer, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import PricingSection from '@/components/PricingSection';
+import BusinessShowcase from '@/components/BusinessShowcase';
 
 interface ReceiptItem {
   id: number;
@@ -20,6 +22,7 @@ const Index = () => {
     { id: 1, description: '', amount: 0 }
   ]);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [showCustomization, setShowCustomization] = useState(false);
   
   const receiptRef = useRef<HTMLDivElement>(null);
 
@@ -72,22 +75,80 @@ const Index = () => {
     setItems([{ id: 1, description: '', amount: 0 }]);
   };
 
+  if (showCustomization) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+                  <Receipt className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    QuickReceipt Pro
+                  </h1>
+                  <p className="text-sm text-gray-600">Get Your Custom Business App</p>
+                </div>
+              </div>
+              <Button 
+                onClick={() => setShowCustomization(false)}
+                variant="outline"
+              >
+                ← Back to Demo
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <PricingSection />
+        <BusinessShowcase />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
-              <Receipt className="h-6 w-6 text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+                <Receipt className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  QuickReceipt
+                </h1>
+                <p className="text-sm text-gray-600">Professional Receipt Generator</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                QuickReceipt
-              </h1>
-              <p className="text-sm text-gray-600">Professional Receipt Generator</p>
-            </div>
+            <Button 
+              onClick={() => setShowCustomization(true)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            >
+              <Sparkles className="h-4 w-4 mr-2" />
+              Get Custom Version
+            </Button>
           </div>
+        </div>
+      </div>
+
+      {/* Demo Banner */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            🌟 <strong>This is a demo version.</strong> Get your custom branded app with your logo, colors, and business info for just ₦2,000! 
+            <button 
+              onClick={() => setShowCustomization(true)}
+              className="underline ml-2 hover:text-yellow-300"
+            >
+              Learn more →
+            </button>
+          </p>
         </div>
       </div>
 
@@ -303,6 +364,16 @@ const Index = () => {
               <span>✓ Print Ready</span>
               <span>✓ Professional Design</span>
               <span>✓ Mobile Friendly</span>
+            </div>
+            
+            <div className="mt-6 pt-6 border-t">
+              <Button 
+                onClick={() => setShowCustomization(true)}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                Get Your Custom Business App - Starting at ₦2,000
+              </Button>
             </div>
           </div>
         </div>
