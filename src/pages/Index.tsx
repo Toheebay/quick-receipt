@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { Plus, Trash2, Receipt, Download, Printer, Sparkles } from 'lucide-react';
@@ -358,30 +357,18 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t mt-8 sm:mt-16">
-        <div className="container mx-auto px-4 py-6 sm:py-8">
-          <div className="text-center">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">QuickReceipt Pro</h3>
-            <p className="text-sm sm:text-base text-gray-600 mb-4">Professional receipt generation for modern businesses</p>
-            <div className="flex justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-500 flex-wrap">
-              <span>✓ Fast & Reliable</span>
-              <span>✓ Print Ready</span>
-              <span>✓ Professional Design</span>
-              <span>✓ Mobile Friendly</span>
-            </div>
-            
-            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t">
-              <Button 
-                onClick={() => setShowCustomization(true)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-xs sm:text-sm"
-              >
-                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                Get Your Custom Business App - Starting at ₦2,000
-              </Button>
-            </div>
-          </div>
-        </div>
+      {/* Custom Footer */}
+      <footer className="text-center text-sm py-4 bg-gray-100 mt-10">
+        <p>Powered by <strong>Toheebay</strong> © 2025</p>
+        <p className="text-gray-600">
+          📞 +234 706 741 2852 | ✉️{' '}
+          <a 
+            href="mailto:adebayoajani23@toheebay.online" 
+            className="text-blue-600 hover:underline"
+          >
+            adebayoajani23@toheebay.online
+          </a>
+        </p>
       </footer>
     </div>
   );
