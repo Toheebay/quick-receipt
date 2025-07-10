@@ -39,26 +39,37 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ packageType, amount, onPaymen
     setIsLoading(true);
 
     try {
+      // You need to replace this with your actual Flutterwave public key
+      const publicKey = "FLWPUBK_TEST-SANDBOX_PUBLIC_KEY_HERE"; // Replace with your actual public key
+      
+      if (!window.FlutterwaveCheckout) {
+        alert('Payment system is loading. Please try again in a moment.');
+        setIsLoading(false);
+        return;
+      }
+
       window.FlutterwaveCheckout({
-        public_key: "FLWPUBK_TEST-YOUR_PUBLIC_KEY_HERE", // Replace with your public key
+        public_key: publicKey,
         tx_ref: `QR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         amount: amount,
         currency: "NGN",
-        payment_options: "card, banktransfer, ussd",
+        payment_options: "card,mobilemoney,ussd",
         customer: {
           email: formData.email,
           phone_number: formData.phone,
           name: formData.name,
         },
         customizations: {
-          title: "QuickReceipt Customization",
-          description: `${packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package for ${formData.businessName}`,
-          logo: "https://your-logo-url.com/logo.png",
+          title: "QuickReceipt Pro",
+          description: `${packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package - Custom Receipt App`,
+          logo: "",
         },
         callback: function (data: any) {
-          console.log("Payment successful:", data);
+          console.log("Payment callback:", data);
           if (data.status === "successful") {
             onPaymentSuccess(data.tx_ref);
+          } else {
+            alert('Payment was not successful. Please try again.');
           }
           setIsLoading(false);
         },
@@ -69,112 +80,125 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ packageType, amount, onPaymen
       });
     } catch (error) {
       console.error("Payment error:", error);
+      alert('There was an error processing your payment. Please try again.');
       setIsLoading(false);
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="h-5 w-5" />
-          Customize Your Receipt App
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6">
-        <form onSubmit={handlePayment} className="space-y-4">
-          <div>
-            <Label htmlFor="businessName">Business Name *</Label>
-            <Input
-              id="businessName"
-              name="businessName"
-              value={formData.businessName}
-              onChange={handleInputChange}
-              placeholder="Your Business Name"
-              required
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="name">Contact Person *</Label>
-            <Input
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="Full Name"
-              required
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="email">Email *</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="your@email.com"
-              required
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="phone">Phone Number *</Label>
-            <Input
-              id="phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="080XXXXXXXX"
-              required
-            />
-          </div>
-
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-gray-800 mb-2">
-              {packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package
-            </h3>
-            <p className="text-2xl font-bold text-blue-600">₦{amount.toLocaleString()}</p>
-            <div className="text-sm text-gray-600 mt-2">
-              {packageType === 'basic' ? (
-                <ul className="space-y-1">
-                  <li>• Custom business branding</li>
-                  <li>• Logo integration</li>
-                  <li>• Color customization</li>
-                  <li>• Print-ready receipts</li>
-                </ul>
-              ) : (
-                <ul className="space-y-1">
-                  <li>• Everything in Basic</li>
-                  <li>• Multiple templates</li>
-                  <li>• Customer database</li>
-                  <li>• Monthly reports</li>
-                  <li>• Priority support</li>
-                </ul>
-              )}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+      <Card className="w-full max-w-lg mx-auto">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <CreditCard className="h-5 w-5" />
+            Customize Your Receipt App
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-6">
+          <form onSubmit={handlePayment} className="space-y-4">
+            <div>
+              <Label htmlFor="businessName" className="text-sm font-medium">Business Name *</Label>
+              <Input
+                id="businessName"
+                name="businessName"
+                value={formData.businessName}
+                onChange={handleInputChange}
+                placeholder="Your Business Name"
+                className="mt-1"
+                required
+              />
             </div>
-          </div>
+            
+            <div>
+              <Label htmlFor="name" className="text-sm font-medium">Contact Person *</Label>
+              <Input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Full Name"
+                className="mt-1"
+                required
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="email" className="text-sm font-medium">Email *</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="your@email.com"
+                className="mt-1"
+                required
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="phone" className="text-sm font-medium">Phone Number *</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="080XXXXXXXX"
+                className="mt-1"
+                required
+              />
+            </div>
 
-          <Button 
-            type="submit" 
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              `Pay ₦${amount.toLocaleString()} Now`
-            )}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">
+                {packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package
+              </h3>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600">₦{amount.toLocaleString()}</p>
+              <div className="text-sm text-gray-600 mt-2">
+                {packageType === 'basic' ? (
+                  <ul className="space-y-1 text-xs sm:text-sm">
+                    <li>• Custom business branding</li>
+                    <li>• Logo integration</li>
+                    <li>• Color customization</li>
+                    <li>• Print-ready receipts</li>
+                  </ul>
+                ) : (
+                  <ul className="space-y-1 text-xs sm:text-sm">
+                    <li>• Everything in Basic</li>
+                    <li>• Multiple templates</li>
+                    <li>• Customer database</li>
+                    <li>• Monthly reports</li>
+                    <li>• Priority support</li>
+                  </ul>
+                )}
+              </div>
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-3"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                `Pay ₦${amount.toLocaleString()} Now`
+              )}
+            </Button>
+          </form>
+
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-xs text-yellow-800">
+              <strong>Note:</strong> After successful payment, we'll contact you within 24 hours to set up your customized receipt app with your branding and preferences.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
