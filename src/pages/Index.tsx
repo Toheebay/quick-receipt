@@ -1,7 +1,6 @@
-
 import React, { useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { Plus, Trash2, Receipt, Download, Print } from 'lucide-react';
+import { Plus, Trash2, Receipt, Download, Printer } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +24,7 @@ const Index = () => {
   const receiptRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
-    content: () => receiptRef.current,
+    contentRef: receiptRef,
     documentTitle: `Receipt-${customerName || 'Customer'}-${new Date().toLocaleDateString()}`,
   });
 
@@ -212,7 +211,7 @@ const Index = () => {
                         size="sm"
                         className="bg-blue-600 hover:bg-blue-700 text-white"
                       >
-                        <Print className="h-4 w-4 mr-1" />
+                        <Printer className="h-4 w-4 mr-1" />
                         Print
                       </Button>
                       <Button 
